@@ -184,7 +184,9 @@ public class Player {
     public void leaveGame(TableGame table)          //Method to remove the player from the table
     {
         table.getGameplayers().remove(this);
-        JOptionPane.showMessageDialog(null,"Player " + this.getName() + " have left the game");
     }
 
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
 }

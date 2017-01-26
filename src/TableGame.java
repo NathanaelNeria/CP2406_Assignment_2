@@ -11,18 +11,16 @@ public class TableGame {
     private String categoryMode;
     private String lastPlayerTurn;          //Defining all the variable
 
-    TableGame(int numberOfPlayers, Deck deckcard)       //Constructing the class
+    TableGame(ArrayList<String> playerName, Deck deckcard)       //Constructing the class
     {
         categoryMode = "";
         usedCard = new ArrayList<Card>();
         gameplayers = new ArrayList<Player>();
         deckCard = deckcard;
         lastPlayerTurn = "";
-        for(int x = 0; x < numberOfPlayers; x++)
+        for(int x = 0; x < playerName.size(); x++)
         {
-            String nameOfPlayer = JOptionPane.showInputDialog(null,"Enter player name", "Name",
-                    JOptionPane.INFORMATION_MESSAGE);
-            gameplayers.add(new Player(nameOfPlayer));              //Asking the player name and add the to the table as an arraylist
+            gameplayers.add(new Player(playerName.get(x)));
         }
         for(int x = 0; x<8; x++) {
             for (Player player : gameplayers) {
@@ -40,22 +38,22 @@ public class TableGame {
         String game = "";
         if(categoryMode.equals("H"))
         {
-            game = "It is a game of hardness";
+            game = "HARDNESS";
         }
         else if(categoryMode.equals("S"))
         {
-            game = "It is a game of specific gravity";
+            game = "SPECIFIC GRAVITY";
         }
         else if(categoryMode.equals("C"))
         {
-            game = "It is a game of cleavage";
+            game = "CLEAVAGE";
         }
         else if(categoryMode.equals("A"))
         {
-            game = "It is a game of crustal abundance";
+            game = "CRUSTAL ABUNDANCE";
         }
         else if(categoryMode.equals("E")) {
-            game = "It is a game of economic value";
+            game = "ECONOMIC VALUE";
         }
         return game;
     }
@@ -180,5 +178,9 @@ public class TableGame {
 
     public void setDeckCard(Deck deckCard) {                    //Method to set the deckcard again
         this.deckCard = deckCard;
+    }
+
+    public ArrayList<Card> getUsedCard() {
+        return usedCard;
     }
 }

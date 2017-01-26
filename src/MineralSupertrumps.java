@@ -44,7 +44,7 @@ public class MineralSupertrumps {
             System.out.println("Message: " + e.getMessage());           //To show error message
         }
         Deck gameDeck = new Deck(cardList);                             //Making the deck
-        TableGame gameTable = new TableGame(numberOfPlayer,gameDeck);   //Starting the game with the number fo player and the deck
+        /*TableGame gameTable = new TableGame(numberOfPlayer,gameDeck);   //Starting the game with the number fo player and the deck
         int counter = 0;
         while (gameTable.getGameplayers().size()>1)                     //Looping until 1 player left
         {
@@ -60,5 +60,6 @@ public class MineralSupertrumps {
 
         }
         JOptionPane.showMessageDialog(null,"The game is over, "+ gameTable.getGameplayers().get(0).getName() + " lost");
+        */
     }
 }
