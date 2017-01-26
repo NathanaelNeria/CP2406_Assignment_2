@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Rico on 1/25/2017.
+ * There are multiple modfication on assignment 1
  */
 public class MainGame extends JFrame implements ActionListener{
     JLabel guide = new JLabel("Enter the number of player");
@@ -42,9 +43,11 @@ public class MainGame extends JFrame implements ActionListener{
     ArrayList<String> playersList;
     Deck gameDeck;
     int passCount=0;
-
+    //Defining all the global variable needed
     MainGame()
     {
+        //Main Constructor
+        //Adding all the global button action listener and set upp the main frame
         super("Mineral Supertrump");
         ArrayList<Card> cardList = new ArrayList<Card>();
         playersList = new ArrayList<String>();
@@ -64,6 +67,7 @@ public class MainGame extends JFrame implements ActionListener{
         setSize(1920,1080);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        //Reading the text.csv file for the card name and description
         String[] array;
         String string = "";
         Path file =
@@ -76,10 +80,12 @@ public class MainGame extends JFrame implements ActionListener{
             int y=1;
             while ((string = reader.readLine()) != null){
                 array = string.split(",");
-                ImageIcon img = new ImageIcon("images\\slide"+(y)+".jpg");
+                ImageIcon img = new ImageIcon("images\\slide"+(y)+".jpg");//Inserting the image icon from the images folder
+                //Creating the Normal card with images
                 cardList.add(new NormalCardWithPictures(array[0],Float.valueOf(array[1]),Float.valueOf(array[2]),array[3],array[4],array[5],new ImageIcon(img.getImage().getScaledInstance(200,300,Image.SCALE_SMOOTH)) ));
                 y++;
             }
+            //Creating all the Supertrump card with images
             ImageIcon img1 = new ImageIcon("images\\Slide58.jpg");
             cardList.add(new SupertrumpCardWithPictures("The Mineralogist",new ImageIcon(img1.getImage().getScaledInstance(200,300,Image.SCALE_SMOOTH))));
             ImageIcon img2 = new ImageIcon("images\\Slide60.jpg");
@@ -97,37 +103,37 @@ public class MainGame extends JFrame implements ActionListener{
         {
             guide.setText("Error, please reopen the application");
         }
+        //Putting all the card into the deck
         gameDeck = new Deck(cardList);
-        playerSelection();
-
+        playerSelection();  //Call the player selection menu
         setVisible(true);
     }
 
-    public void actionPerformed(ActionEvent e)
+    public void actionPerformed(ActionEvent e) //For all the menu button action event
     {
-        if(e.getSource()==threePlayer)
+        if(e.getSource()==threePlayer)  //If 3 players were chosen
         {
             numberOfPlayer = 3;
             mainScreen.removeAll();
-            enterPlayerName();
+            enterPlayerName();      //Proceed to enter player name
         }
-        else if(e.getSource()==fourPlayer)
+        else if(e.getSource()==fourPlayer)  //If 4 players were chosen
         {
             numberOfPlayer = 4;
             mainScreen.removeAll();
-            enterPlayerName();
+            enterPlayerName();      //Proceed to enter player name
         }
-        else if(e.getSource()==fivePlayer) {
+        else if(e.getSource()==fivePlayer) {    //If 5 players were chosen
             numberOfPlayer = 5;
             mainScreen.removeAll();
-            enterPlayerName();
+            enterPlayerName();      //Proceed to enter player name
         }
-        else if(e.getSource()==done)
+        else if(e.getSource()==done)    //When entering the players' name
         {
             if(doneCount<numberOfPlayer)
             {
                 String name = playerName.getText();
-                playersList.add(name);
+                playersList.add(name);      //Add the player
                 doneCount+=1;
                 guide.setText("Enter player "+doneCount+" name");
                 playerName.setText("");
@@ -135,19 +141,19 @@ public class MainGame extends JFrame implements ActionListener{
             else
             {
                 String name = playerName.getText();
-                playersList.add(name);
-                gameTable = new TableGame(playersList,gameDeck);
-                pickTrump();
+                playersList.add(name);      //Add the player
+                gameTable = new TableGame(playersList,gameDeck);        //Make the game table
+                pickTrump();            //Start trump mode selection
             }
         }
-        else if(e.getSource()==hardnessMode)
+        else if(e.getSource()==hardnessMode)    //For hardness mode
         {
-            gameTable.setCategoryMode("H");
-            justPickMode = true;
+            gameTable.setCategoryMode("H");     //Set trump mode to hardness
+            justPickMode = true;                //Just pick the mode turn to true
             passCount = 0;
-            playCard();
+            playCard();                         //Enter the game to enter the card
         }
-        else if(e.getSource()==specificGravityMode)
+        else if(e.getSource()==specificGravityMode)     //All the else if below are the same as above only different trump mode
         {
             gameTable.setCategoryMode("S");
             justPickMode = true;
@@ -175,29 +181,35 @@ public class MainGame extends JFrame implements ActionListener{
             passCount = 0;
             playCard();
         }
-        else if(e.getSource()==deckCard)
+        else if(e.getSource()==deckCard)        //When the deck is pressed
         {
             if (gameTable.getUsedCard().size()==0 || justPickMode)
-            {guide.setText("You cannot pass, this is the first turn or you have picked the mode so you need to play a card");}
+            {guide.setText("You cannot pass, this is the first turn or you have picked the mode so you need to play a card");}  //When you just pick the mode so you need to enter the card
             else {
                 gameTable.getGameplayers().get(playerTurn % (gameTable.getGameplayers().size())).drawCard(gameTable.getDeckCard().cardDrawn());
                 playerTurn++;
                 passCount++;
                 playCard();
+                //Adding the pass count and draw the card for the respective player, then go to next player
+            }
+            if(gameTable.getDeckCard().getDeckContent().size()==0)
+            {
+                gameTable.addBackCard();        //If there are no more card left on the deck, add it back
             }
         }
 
         revalidate();
-        repaint();
+        repaint();          //To reaload the GUI
     }
 
     public static void main(String[] args) {
 
-        MainGame app = new MainGame();
+        MainGame app = new MainGame();  //The main program run
     }
 
     public void playerSelection()
     {
+        //Adding all the action listener to the button, and add it to the main screen
         threePlayer.addActionListener(this);
         fourPlayer.addActionListener(this);
         fivePlayer.addActionListener(this);
@@ -207,8 +219,9 @@ public class MainGame extends JFrame implements ActionListener{
     }
 
     public void pickTrump()
-    {
+    {   //Function to pick the trump mode
         guide.setText(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName()+", choose the Trump mode you want to play");
+        //Remove all the previous panel to insert the Trump mode
         mainScreen.removeAll();
         gameScreen.removeAll();
         tableScreen.removeAll();
@@ -222,7 +235,7 @@ public class MainGame extends JFrame implements ActionListener{
         tableScreen.add(crustalAbundanceMode);
         tableScreen.add(economicValueMode);
         int turnOfXPlayer = playerTurn%(gameTable.getGameplayers().size());
-        for(int x = 0; x< gameTable.getGameplayers().get(turnOfXPlayer).getHand().size();x++)
+        for(int x = 0; x< gameTable.getGameplayers().get(turnOfXPlayer).getHand().size();x++)   //To show all the player card
         {
             if(gameTable.getGameplayers().get(turnOfXPlayer).getCard(x) instanceof NormalCard)
             {
@@ -244,6 +257,7 @@ public class MainGame extends JFrame implements ActionListener{
 
     public void enterPlayerName()
     {
+        //Funtion to enter the player name
         guide.setText("Enter player "+doneCount+" name");
         mainScreen.removeAll();
         mainScreen.add(playerName);
@@ -252,13 +266,15 @@ public class MainGame extends JFrame implements ActionListener{
 
     public void playCard()
     {
+        //Funtion for the player to play accordingly
         if(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName().equals(gameTable.getLastPlayerTurn())&& passCount == gameTable.getGameplayers().size()-1)
         {
-            pickTrump();
+            pickTrump();    //Pick trump if all the other playr has pass
         }
-            else {
+            else {          //Normal card vaidation
             int turnOfXPlayer = playerTurn % (gameTable.getGameplayers().size());
             guide.setText("Your move " + gameTable.getGameplayers().get(turnOfXPlayer).getName() + ", click on the card you want to play. Current Trump Mode = " + gameTable.getGameMode() + " or click the deck to pass. Below is the card you have");
+            //Removing and adding all the component for the GUI
             mainScreen.removeAll();
             tableScreen.removeAll();
             cardInHand.removeAll();
@@ -267,23 +283,27 @@ public class MainGame extends JFrame implements ActionListener{
             gameScreen.add(cardInHand);
             tableScreen.add(deckCard);
             tableScreen.add(lastCard);
+            //Changing all the card into button and adding it into the arraylist
             for (int x = 0; x < gameTable.getGameplayers().get(turnOfXPlayer).getHand().size(); x++) {
-                if (gameTable.getGameplayers().get(turnOfXPlayer).getCard(x) instanceof NormalCard) {
+                if (gameTable.getGameplayers().get(turnOfXPlayer).getCard(x) instanceof NormalCard) {   //For normal card
                     JButton cardbtn = new JButton(new ImageIcon(((NormalCardWithPictures) gameTable.getGameplayers().get(turnOfXPlayer).getCard(x)).getCardImage().getImage()));
                     cardbtn.setSize(200, 300);
                     listOfJButton.add(cardbtn);
-                } else {
+                } else {            //For super trump card
                     JButton cardbtn = new JButton(new ImageIcon(((SupertrumpCardWithPictures) gameTable.getGameplayers().get(turnOfXPlayer).getCard(x)).getCardImage().getImage()));
                     cardbtn.setSize(200, 300);
                     listOfJButton.add(cardbtn);
                 }
             }
+            //Adding all the button into the GUI and implement the action event
             for (int button = 0; button < gameTable.getGameplayers().get(playerTurn % gameTable.getGameplayers().size()).getHand().size(); button++) {
                 listOfJButton.get(button).addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
+                        //Get the index of card then get the card from that index and validate it using assignment 1 function with modification
                         JButton buttonSource = (JButton) e.getSource();
                         Card cardplayed = gameTable.getGameplayers().get(playerTurn % gameTable.getGameplayers().size()).getCard(listOfJButton.indexOf(buttonSource));             //Trying to get the card inputted
-                        boolean gameContinue = useCard(cardplayed, gameTable.getGameplayers().get(playerTurn % gameTable.getGameplayers().size()));
+                        boolean gameContinue = useCard(cardplayed, gameTable.getGameplayers().get(playerTurn % gameTable.getGameplayers().size()));     //Use the card validation method from assignment 1 with modification
+                        //ALl the code below is taken from assignment 1 with modification
                         if(gameTable.getCategoryMode().equals("NEW")) {
                             gameTable.putCard(cardplayed);
                             gameTable.getGameplayers().get(playerTurn % gameTable.getGameplayers().size()).getHand().remove(listOfJButton.indexOf(buttonSource));
@@ -291,6 +311,9 @@ public class MainGame extends JFrame implements ActionListener{
                             {
                                 playerTurn = playerTurn%gameTable.getGameplayers().size();
                                 gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
+                                playCard();
+                                revalidate();
+                                repaint();
                             }
                             else {
                                 justPickMode = false;
@@ -312,6 +335,9 @@ public class MainGame extends JFrame implements ActionListener{
                                 {
                                     playerTurn = playerTurn%gameTable.getGameplayers().size();
                                     gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
+                                    playCard();
+                                    revalidate();
+                                    repaint();
                                 }
                             }
                             else
@@ -324,6 +350,9 @@ public class MainGame extends JFrame implements ActionListener{
                                 {
                                     playerTurn = playerTurn%gameTable.getGameplayers().size();
                                     gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
+                                    playCard();
+                                    revalidate();
+                                    repaint();
                                 }
                                 else {
                                     playerTurn++;
@@ -349,6 +378,9 @@ public class MainGame extends JFrame implements ActionListener{
                             {
                                 playerTurn = playerTurn%gameTable.getGameplayers().size();
                                 gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
+                                playCard();
+                                revalidate();
+                                repaint();
                             }
                             else {
                                 playerTurn++;
@@ -378,11 +410,11 @@ public class MainGame extends JFrame implements ActionListener{
         }
     }
 
-    public boolean useCard(Card card, Player play)     //Method to play the card to see whether it is allowed or not
+    public boolean useCard(Card card, Player play)     //Method to play the card to see whether it is allowed or not(Taken from assignment 1)
     {
         boolean isHigher = false;
         int comparison = 0;
-
+        //The method below is to compare the card and return trus if the card is playable
         if(play.getName().equals(gameTable.getLastPlayerTurn()) || gameTable.getUsedCard().size()==0)     //Decision if it is the start or the player get to play again
         {
             if(card  instanceof SupertrumpCard)
