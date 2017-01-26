@@ -314,6 +314,7 @@ public class MainGame extends JFrame implements ActionListener{
                                 playerTurn = playerTurn%gameTable.getGameplayers().size();
                                 winner.add(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName());
                                 gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
+                                justPickMode = false;
                                 playCard();
                                 revalidate();
                                 repaint();
@@ -339,6 +340,7 @@ public class MainGame extends JFrame implements ActionListener{
                                     playerTurn = playerTurn%gameTable.getGameplayers().size();
                                     winner.add(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName());
                                     gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
+                                    justPickMode = false;
                                     playCard();
                                     revalidate();
                                     repaint();
@@ -355,6 +357,7 @@ public class MainGame extends JFrame implements ActionListener{
                                     playerTurn = playerTurn%gameTable.getGameplayers().size();
                                     winner.add(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName());
                                     gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
+                                    justPickMode = false;
                                     playCard();
                                     revalidate();
                                     repaint();
@@ -384,6 +387,7 @@ public class MainGame extends JFrame implements ActionListener{
                                 playerTurn = playerTurn%gameTable.getGameplayers().size();
                                 winner.add(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName());
                                 gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
+                                justPickMode = false;
                                 playCard();
                                 revalidate();
                                 repaint();
@@ -427,7 +431,7 @@ public class MainGame extends JFrame implements ActionListener{
         boolean isHigher = false;
         int comparison = 0;
         //The method below is to compare the card and return trus if the card is playable
-        if(play.getName().equals(gameTable.getLastPlayerTurn()) || gameTable.getUsedCard().size()==0)     //Decision if it is the start or the player get to play again
+        if(passCount == gameTable.getGameplayers().size()-1 || gameTable.getUsedCard().size()==0 || justPickMode )     //Decision if it is the start or the player get to play again
         {
             if(card  instanceof SupertrumpCard)
             {
