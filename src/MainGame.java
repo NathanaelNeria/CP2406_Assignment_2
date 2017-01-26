@@ -43,6 +43,7 @@ public class MainGame extends JFrame implements ActionListener{
     ArrayList<String> playersList;
     Deck gameDeck;
     int passCount=0;
+    ArrayList<String> winner;
     //Defining all the global variable needed
     MainGame()
     {
@@ -50,6 +51,7 @@ public class MainGame extends JFrame implements ActionListener{
         //Adding all the global button action listener and set upp the main frame
         super("Mineral Supertrump");
         ArrayList<Card> cardList = new ArrayList<Card>();
+        winner = new ArrayList<String>();
         playersList = new ArrayList<String>();
         setLayout(new BorderLayout());
         gameScreen.setLayout(new BoxLayout(gameScreen,BoxLayout.Y_AXIS));
@@ -310,6 +312,7 @@ public class MainGame extends JFrame implements ActionListener{
                             if(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getHand().size()==0)
                             {
                                 playerTurn = playerTurn%gameTable.getGameplayers().size();
+                                winner.add(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName());
                                 gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
                                 playCard();
                                 revalidate();
@@ -334,6 +337,7 @@ public class MainGame extends JFrame implements ActionListener{
                                 if(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getHand().size()==0)
                                 {
                                     playerTurn = playerTurn%gameTable.getGameplayers().size();
+                                    winner.add(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName());
                                     gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
                                     playCard();
                                     revalidate();
@@ -349,6 +353,7 @@ public class MainGame extends JFrame implements ActionListener{
                                 if(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getHand().size()==0)
                                 {
                                     playerTurn = playerTurn%gameTable.getGameplayers().size();
+                                    winner.add(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName());
                                     gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
                                     playCard();
                                     revalidate();
@@ -377,6 +382,7 @@ public class MainGame extends JFrame implements ActionListener{
                             if(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getHand().size()==0)
                             {
                                 playerTurn = playerTurn%gameTable.getGameplayers().size();
+                                winner.add(gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).getName());
                                 gameTable.getGameplayers().get(playerTurn%gameTable.getGameplayers().size()).leaveGame(gameTable);
                                 playCard();
                                 revalidate();
@@ -400,6 +406,12 @@ public class MainGame extends JFrame implements ActionListener{
                             revalidate();
                             repaint();
                         }}
+                    if(gameTable.getGameplayers().size()==1)
+                    {
+                        showWinner();
+                        revalidate();
+                        repaint();
+                    }
                     }
                 }
                 );
@@ -461,5 +473,19 @@ public class MainGame extends JFrame implements ActionListener{
             }
         }
         return isHigher;
+    }
+
+    public void showWinner()
+    {
+        mainScreen.removeAll();
+        JPanel winnerList = new JPanel();
+        winnerList.setLayout(new BoxLayout(winnerList,BoxLayout.Y_AXIS));
+        for(int x = 0; x < winner.size();x++)
+        {
+            String show = "No "+(x+1)+ "= " + winner.get(x) +"";
+            winnerList.add(new JLabel(show));
+        }
+        guide.setText("Here are the winner");
+        mainScreen.add(winnerList);
     }
 }
